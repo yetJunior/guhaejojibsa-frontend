@@ -1,4 +1,5 @@
 import { PutObjectCommand, S3Client, S3ClientConfig } from '@aws-sdk/client-s3';
+import {v4 as uuidv4} from 'uuid';
 import { result } from 'lodash';
 
 // Set the AWS Region.
@@ -18,11 +19,11 @@ const s3Client = new S3Client({
   },
 });
 
-function uuidv4() {
-  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-  );
-}
+// function uuidv4() {
+//   return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+//     (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+//   );
+// }
 
 const uploadImagesToS3 = async (imageFiles: any, imageType: S3ImageType) => {
   const now = new Date(Date.now());
@@ -77,5 +78,5 @@ function convertToImageRequestDto(result: string[]) {
   return arr;
 }
 
-const bucketName = '1team-s3';
+const bucketName = import.meta.env.VITE_S3_BUCKET_NAME;
 export { s3Client, bucketName, uploadImagesToS3 };
