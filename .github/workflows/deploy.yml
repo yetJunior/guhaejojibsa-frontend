@@ -42,6 +42,7 @@ jobs:
       # (3) .env.production 세팅
       - name: Set secret file (prod)
         run: |
+          touch ./.env.production
           echo "${{ secrets.ENV_PRODUCTION }}" | base64 --decode > ./.env.production
           chmod 600 ./env.production
 
