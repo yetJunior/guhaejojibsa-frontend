@@ -87,7 +87,8 @@ jobs:
         with:
           host: ${{ secrets.FRONT_IP }} # Front Server IP
           username: ${{ secrets.FRONT_USER }}
-          key: ${{ secrets.FRONT_ACCESS }}
+          password: ${{ secrets.FRONT_PASSWORD }}
+#          key: ${{ secrets.FRONT_ACCESS }}
           port: ${{ secrets.FRONT_PORT }} # 접속포트
           script: |
             docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_ACCESSTOKEN }}"
