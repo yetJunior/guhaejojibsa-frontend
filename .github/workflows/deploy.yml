@@ -99,4 +99,4 @@ jobs:
             docker rm ${{ secrets.DOCKER_REPOSITORY }} || true
             docker rmi ${{ secrets.DOCKER_REPOSITORY }} || true
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
-            docker run -d --name ${{ secrets.DOCKER_REPOSITORY }} ${{ secrets.DOCKER_DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
+            docker run -d --name gj-front ${{ secrets.DOCKER_DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
