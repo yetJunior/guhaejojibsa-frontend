@@ -42,8 +42,8 @@ jobs:
         run: |
           pwd
           ls -la
-          touch .env.production
-          echo "${{ secrets.ENV_PRODUCTION }}" | base64 --decode > .env.production
+          touch ./.env.production
+          echo "${{ secrets.ENV_PRODUCTION }}" | base64 --decode > ./.env.production
           chmod 600 ./.env.production
           pwd
           ls -la
