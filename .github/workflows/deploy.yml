@@ -43,6 +43,7 @@ jobs:
       - name: Set secret file (prod)
         run: |
           touch ./.env.production
+          ls -la
           echo "${{ secrets.ENV_PRODUCTION }}" | base64 --decode > ./.env.production
           chmod 600 ./env.production
 
