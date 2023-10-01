@@ -65,7 +65,7 @@ jobs:
         run: |
           pwd
           ls -la
-          docker build ./
+          docker build -f ./mutsa-project
 
       # (7) Docker Hub에 private 이미지로 푸시
       - name: Push Docker image to Docker Hub
