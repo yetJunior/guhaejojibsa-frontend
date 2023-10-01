@@ -8,6 +8,8 @@ WORKDIR /app
 #COPY ./.env.production ./
 
 COPY . ./
+COPY ./.env.production ./
+RUN ls -la
 
 RUN npm install
 # 프로덕션을 위한 코드를 빌드하는 경우

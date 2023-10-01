@@ -46,6 +46,8 @@ jobs:
           echo "${{ secrets.ENV_PRODUCTION }}" | base64 --decode > .env.production
           chmod 600 ./.env.production
           pwd
+          ls -la
+          cat .env.production
 
       # (4) package.json의 있는 version을 기반으로 값을 불러옴
       - name: get-npm-version
