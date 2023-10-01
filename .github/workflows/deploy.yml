@@ -62,7 +62,9 @@ jobs:
 
       # (6) Docker 이미지 빌드
       - name: Build Docker image
-        run: docker build ./
+        run: |
+          pwd
+          docker build -f ./
 
       # (7) Docker Hub에 private 이미지로 푸시
       - name: Push Docker image to Docker Hub
