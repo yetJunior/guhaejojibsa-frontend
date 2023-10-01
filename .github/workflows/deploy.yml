@@ -95,9 +95,9 @@ jobs:
           script: |
             date >> ~/gj-front-log.txt
             docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_ACCESSTOKEN }}"
-            docker stop ${{ secrets.DOCKER_REPOSITORY }} || true
-            docker rm ${{ secrets.DOCKER_REPOSITORY }} || true
-            docker rmi ${{ secrets.DOCKER_REPOSITORY }} || true
+            docker stop gj_front || true
+            docker rm gj_front || true
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest || true
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
             docker run -d --name gj_front guhaejojibsa621/guhaejo_jibsa_front:latest
 #            docker run -d --name gj-front ${{ secrets.DOCKER_DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
