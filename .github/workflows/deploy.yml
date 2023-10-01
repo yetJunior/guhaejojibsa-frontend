@@ -43,6 +43,8 @@ jobs:
       # (3) .env.production 세팅
       - name: Set secret file (prod)
         run: |
+          pwd
+          ls -la
           cd mutsa-project
           touch .env.production
           echo "${{ secrets.ENV_PRODUCTION }}" | base64 --decode > .env.production
