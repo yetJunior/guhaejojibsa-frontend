@@ -49,9 +49,6 @@ jobs:
           chmod 600 ./.env.production
 
       # (4) package.json의 있는 version을 기반으로 값을 불러옴
-#      - name: Save version
-#        id: version
-#        run: echo ::set-output name=tag::$(echo $(node -p -e "require('./package.json').version"))
       - name: get-npm-version
         id: package-version
         uses: martinbeentjes/npm-get-version-action@v1.3.1
@@ -65,11 +62,11 @@ jobs:
 
       # (6) Docker 이미지 빌드
       - name: Build Docker image
-        run: docker build --tag ${{ steps.package-version.outputs.current-version}} -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }} ./
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }} ./
 
       # (7) Docker Hub에 private 이미지로 푸시
       - name: Push Docker image to Docker Hub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ steps.package-version.outputs.current-version}}
 
       # (8) Deploy to Front Server
       - name: Deploy to Front Server
