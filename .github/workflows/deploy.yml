@@ -72,8 +72,8 @@ jobs:
           file: ./mutsa-project/Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
-            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ steps.package-version.outputs.current-version}}
+            ${{ secrets.DOCKER_REPOSITORY }}:latest
+            ${{ secrets.DOCKER_REPOSITORY }}:${{ steps.package-version.outputs.current-version}}
 
 #      # (7) Docker Hub에 private 이미지로 푸시
 #      - name: Push Docker image to Docker Hub
