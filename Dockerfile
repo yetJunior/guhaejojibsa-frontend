@@ -8,7 +8,7 @@ WORKDIR /app
 #COPY ./.env.production ./
 
 COPY . ./
-COPY ./.env.production ./
+#COPY .env.production ./
 RUN ls -la
 
 RUN npm install
