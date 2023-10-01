@@ -40,11 +40,8 @@ jobs:
       # (3) .env.production 세팅
       - name: Set secret file (prod)
         run: |
-          ls -la
-          cd musta-project
+          cd mutsa-project
           touch .env.production
-          pwd
-          ls -la
           echo "${{ secrets.ENV_PRODUCTION }}" | base64 --decode > .env.production
           chmod 600 ./.env.production
 
@@ -53,25 +50,36 @@ jobs:
         id: package-version
         uses: martinbeentjes/npm-get-version-action@v1.3.1
 
-      # (5) Docker Hub 로그인
+      # (5) Docker Buildx를 위한 QEMU 세팅
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      # (6) 크로스 플랫폼 빌드를 위한 Buildx 세팅
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # (7) Docker Hub 로그인
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_ACCESSTOKEN }}
 
-      # (6) Docker 이미지 빌드
-      - name: Build Docker image
-        run: |
-          pwd
-          ls -la
-          docker build -f ./mutsa-project
+      # (8) Docker build 및 push
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          file: ./mutsa-project/Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
+            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ steps.package-version.outputs.current-version}}
 
-      # (7) Docker Hub에 private 이미지로 푸시
-      - name: Push Docker image to Docker Hub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ steps.package-version.outputs.current-version}}
+#      # (7) Docker Hub에 private 이미지로 푸시
+#      - name: Push Docker image to Docker Hub
+#        run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ steps.package-version.outputs.current-version}}
 
-      # (8) Deploy to Front Server
+      # (9) Deploy to Front Server
       - name: Deploy to Front Server
         uses: appleboy/ssh-action@master
         with:
