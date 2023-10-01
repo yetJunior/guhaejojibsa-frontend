@@ -91,6 +91,7 @@ jobs:
 #          key: ${{ secrets.FRONT_ACCESS }}
           port: ${{ secrets.FRONT_PORT }} # 접속포트
           script: |
+            date >> ~/ssh-log.txt
             docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_ACCESSTOKEN }}"
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
             docker stop ${{ secrets.DOCKER_REPOSITORY }} || true
