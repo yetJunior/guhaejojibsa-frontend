@@ -27,7 +27,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          sparse-checkout: 'mutsa-project'
+          sparse-checkout: |
+            mutsa-project
 
 
       # (2) Node 세팅
