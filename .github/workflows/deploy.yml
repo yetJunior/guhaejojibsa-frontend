@@ -74,8 +74,8 @@ jobs:
           file: ./mutsa-project/Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKER_REPOSITORY }}:latest
-            ${{ secrets.DOCKER_REPOSITORY }}:${{ steps.package-version.outputs.current-version}}
+            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
+            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ steps.package-version.outputs.current-version}}
 
 #      # (7) Docker Hub에 private 이미지로 푸시
 #      - name: Push Docker image to Docker Hub
@@ -91,10 +91,10 @@ jobs:
 #          key: ${{ secrets.FRONT_ACCESS }}
           port: ${{ secrets.FRONT_PORT }} # 접속포트
           script: |
-            date >> ~/ssh-log.txt
+            date >> ~/gj-front-log.txt
             docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_ACCESSTOKEN }}"
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
             docker stop ${{ secrets.DOCKER_REPOSITORY }} || true
             docker rm ${{ secrets.DOCKER_REPOSITORY }} || true
             docker image prune -a || y
-            docker run -d --name ${{ secrets.DOCKER_REPOSITORY }} ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
+            docker run -d --name ${{ secrets.DOCKER_REPOSITORY }} ${{ secrets.DOCKER_DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
