@@ -7,8 +7,6 @@ WORKDIR /app
 COPY ./mutsa-project/package*.json ./
 COPY ./mutsa-project/.env.production ./
 
-RUN pwd
-RUN ls -la
 RUN npm install
 # 프로덕션을 위한 코드를 빌드하는 경우
 # RUN npm ci --omit=dev
