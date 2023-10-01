@@ -65,7 +65,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_ACCESSTOKEN }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       # (8) Docker build 및 push
       - name: Build and push
