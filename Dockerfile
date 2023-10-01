@@ -4,13 +4,14 @@ WORKDIR /app
 # 앱 의존성 설치
 # 가능한 경우(npm@5+) package.json과 package-lock.json을 모두 복사하기 위해
 # 와일드카드를 사용
-COPY ./mutsa-project/package*.json ./
-COPY ./mutsa-project/.env.production ./
+#COPY ./package*.json ./
+#COPY ./.env.production ./
+
+COPY . ./
 
 RUN npm install
 # 프로덕션을 위한 코드를 빌드하는 경우
 # RUN npm ci --omit=dev
 # 앱 소스 추가
-COPY . .
 EXPOSE 3000
 CMD ["npm", "run", "prod"]
