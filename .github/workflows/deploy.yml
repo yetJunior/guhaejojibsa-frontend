@@ -49,6 +49,8 @@ jobs:
       - name: get-npm-version
         id: package-version
         uses: martinbeentjes/npm-get-version-action@v1.3.1
+        with:
+          path: ./mutsa-project
 
       # (5) Docker Buildx를 위한 QEMU 세팅
       - name: Set up QEMU
