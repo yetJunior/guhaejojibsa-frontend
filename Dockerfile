@@ -7,8 +7,9 @@ WORKDIR /app
 #COPY ./package*.json ./
 #COPY ./.env.production ./
 
+RUN ls -la
 COPY . ./
-#COPY .env.production ./
+COPY .env.production ./
 RUN ls -la
 
 RUN npm install
