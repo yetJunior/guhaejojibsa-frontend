@@ -9,7 +9,7 @@ WORKDIR /app
 
 RUN ls -la
 COPY . ./
-COPY /home/runner/work/guhaejojibsa-frontend/guhaejojibsa-frontend/.env.production ./
+COPY .env.production ./
 RUN ls -la
 
 RUN npm install
