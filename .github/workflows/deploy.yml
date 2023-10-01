@@ -41,7 +41,7 @@ jobs:
       - name: Set secret file (prod)
         run: |
           ls -la
-          cd mutsa-project
+          cd musta-project
           touch .env.production
           pwd
           ls -la
