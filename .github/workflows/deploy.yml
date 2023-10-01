@@ -25,9 +25,9 @@ jobs:
     steps:
       # (1) 기본 체크아웃
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
-          sparse-checkout: mutsa-project
+          sparse-checkout: 'mutsa-project'
 
       # (2) Node 세팅
       - name: Set up Node
