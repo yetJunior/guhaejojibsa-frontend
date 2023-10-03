@@ -25,9 +25,7 @@ jobs:
     steps:
       # (1) 기본 체크아웃
       - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          sparse-checkout: mutsa-project
+        uses: actions/checkout@v4
 
       # (2) Node 세팅
       - name: Set up Node
@@ -42,41 +40,64 @@ jobs:
       # (3) .env.production 세팅
       - name: Set secret file (prod)
         run: |
-          echo "${{ secrets.ENV_PRODUCTION }}" | base64 --decode > ./.env.production
-          chmod 600 ./env.production
+          pwd
+          ls -la
+          touch ./.env.production
+          echo "${{ secrets.ENV_PRODUCTION }}" > ./.env.production
+          chmod 600 ./.env.production
+          pwd
+          ls -la
+          cat .env.production
 
       # (4) package.json의 있는 version을 기반으로 값을 불러옴
-      - name: Save version
-        id: version
-        run: echo ::set-output name=tag::$(echo $(node -p -e "require('./package.json').version"))
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
 
-      # (5) Docker Hub 로그인
+      # (5) Docker Buildx를 위한 QEMU 세팅
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      # (6) 크로스 플랫폼 빌드를 위한 Buildx 세팅
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # (7) Docker Hub 로그인
       - name: Log in to Docker Hub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_ACCESSTOKEN }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_ACCESSTOKEN }}
 
-      # (6) Docker 이미지 빌드
-      - name: Build Docker image
-        run: docker build --tag ${{secrets.DOCKERHUB_REPOSITORY}}:$version -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }} ./
+      # (8) Docker build 및 push
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
+            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ steps.package-version.outputs.current-version}}
 
-      # (7) Docker Hub에 private 이미지로 푸시
-      - name: Push Docker image to Docker Hub
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}
+#      # (7) Docker Hub에 private 이미지로 푸시
+#      - name: Push Docker image to Docker Hub
+#        run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ steps.package-version.outputs.current-version}}
 
-      # (8) Deploy to Front Server
+      # (9) Deploy to Front Server
       - name: Deploy to Front Server
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.FRONT_IP }} # Front Server IP
-          username: ${{ secrets.FRONT_USER }}
+          username: ${{ secrets.FRONT_USERNAME }}
           password: ${{ secrets.FRONT_PASSWORD }}
+#          key: ${{ secrets.FRONT_ACCESS }}
           port: ${{ secrets.FRONT_PORT }} # 접속포트
           script: |
-            sudo docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_PASSWORD }}"
-            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest
-            sudo docker stop ${{ secrets.DOCKERHUB_REPOSITORY }} || true
-            sudo docker rm ${{ secrets.DOCKERHUB_REPOSITORY }} || true
-            sudo docker image prune -a || y
-            sudo docker run -d --name ${{ secrets.DOCKERHUB_REPOSITORY }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest
+            date >> ~/gj-front-log.txt
+            docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_ACCESSTOKEN }}"
+            docker stop gj_front || true
+            docker rm gj_front || true
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest || true
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
+            docker run -d --name gj_front guhaejojibsa621/guhaejo_jibsa_front:latest
+#            docker run -d --name gj-front ${{ secrets.DOCKER_DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
