@@ -15,6 +15,7 @@
 | API 문서 링크 |                      [📗link](http://docs.guhaejo-jibsa.site/)                       |
 |  서버 모니터링  |       [🖥️link](https://mon0mon-uptime-main.duckdns.org/status/guhaejo-jibsa)        |
 |  프로젝트 문서  | [📝link](https://mon0mon-outline.duckdns.org/s/13b50e7f-b702-4b91-acb1-3e6f7ce32ab4) |
+|  예제 동영상   |                                      [📹link](https://youtu.be/xMsFRTb-t4Q)                                      |
 
 <br>
 
@@ -159,3 +160,15 @@
 - 유저는 타 유저의 불건전한 게시글과 리뷰를 신고
 - 관리자는 신고 조회 및 관리 가능
 - 상태 값 : { '검토중', '해결됨', '거절됨' }
+
+---
+
+### 🔼 버전 정보
+
+#### 1️⃣ Ver 1.0
+- 게시글 기능 (판매만 등록 가능)
+- 게시글을 통한 상품 구매 가능 (토스 API 사용)
+- 게시글을 올린 유저와 채팅 기능 (Redis Pub/Sub 사용, WebSocket 사용)
+- 게시글의 리뷰 작성 기능
+- 게시글 및 리뷰 신고 기능
+- 소셜 로그인 기능 (Google/Naver)
