@@ -49,9 +49,9 @@ export const AlbumCard = (props: AlbumCardProps) => {
           <CardMedia
             component="img"
             image={
-              article.images.length === 0
-                ? 'https://via.placeholder.com/1920x1080.png?text=via%20placeholder.com'
-                : article.images[0].fullPath
+              article.thumbnail == null
+                ? '/img/favicon.png'
+                : article.thumbnail
             }
             sx={{
               width: '244px', // 이미지 컨테이너의 가로 너비를 고정합니다.
