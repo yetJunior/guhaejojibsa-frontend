@@ -11,6 +11,7 @@ interface OrderDetailResponse {
   date: string;
   orderStatus: OrderStatus;
   amount: number;
+  receiptApiId: string;
 }
 interface OrderResponse {
   orderApiId: string;
