@@ -32,6 +32,7 @@ import ReviewForm from '../components/user/ReviewForm.tsx';
 import OrderForm from '../components/user/OrderForm.tsx';
 import React from 'react';
 import OauthSignUpForm from '../components/auth/OauthSignUpForm.tsx';
+import ReceiptDetail from "../components/payment/ReceiptDetail.tsx";
 
 const OauthRedirect = React.lazy(
     () => import("../components/auth/OauthRedirect.tsx")
@@ -131,6 +132,8 @@ const UserRouter = () => {
       <Route path="/*" element={<Error404Page />} />
 
       <Route path="/oauth2-redirect" element={<OauthRedirect />} />
+
+      <Route path="/article/:articleApiId/order/:orderApiId/:receiptApiId" element={<ReceiptDetail />} />
 
     </Routes>
   );
