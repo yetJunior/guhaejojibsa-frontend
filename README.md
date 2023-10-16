@@ -21,7 +21,7 @@
 <div>
     <img src="https://uptime.mon0mon.duckdns.org/api/badge/8/status?label=Status&labelPrefix=Back&upLabel=online&downLabel=offline"/>
     <img src="https://uptime.mon0mon.duckdns.org/api/badge/8/ping?24&label=Ping%20in%2024h"/>
-    <img src="https://uptime.mon0mon.duckdns.org/api/badge/8/uptime?label=Uptime in 24h"/>
+    <img src="https://uptime.mon0mon.duckdns.org/api/badge/8/uptime?label=Uptime%20in%2024h"/>
     <img src="https://img.shields.io/badge/Version-1.0.0-green"/>
 </div>
 <br>
