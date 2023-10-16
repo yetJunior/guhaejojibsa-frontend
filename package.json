@@ -7,9 +7,10 @@
     "dev": "vite --host 0.0.0.0 --port 3000",
     "build": "tsc && vite build",
     "build-dev": "tsc && vite build --mode dev",
-    "build-local": "tsc && vite build --mode local",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
+    "preview": "vite preview --host 0.0.0.0 --port 3000",
+    "build-preview-dev" : "tsc && vite build --mode dev && vite preview --host 0.0.0.0 --port 3000",
+    "build-preview-prod" : "tsc && vite build && vite preview -- host 0.0.0.0 --port 3000",
     "prod": "env-cmd -f .env.production vite --host 0.0.0.0 --port 3000"
   },
   "dependencies": {
