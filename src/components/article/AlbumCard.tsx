@@ -21,12 +21,6 @@ type AlbumCardProps = {
   detail: string;
 };
 
-// const theme = createTheme({
-//   palette: {
-//     primary: blue,
-//   },
-// });
-
 export const AlbumCard = (props: AlbumCardProps) => {
   const { article, style } = props;
   const navigate = useNavigate();
@@ -50,7 +44,7 @@ export const AlbumCard = (props: AlbumCardProps) => {
             component="img"
             image={
               article.thumbnail == null
-                ? '/img/favicon.png'
+                ? '/img/article/article_placeholder.png'
                 : article.thumbnail
             }
             sx={{
