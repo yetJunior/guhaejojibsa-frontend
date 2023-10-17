@@ -24,6 +24,9 @@
     <img src="https://uptime.mon0mon.duckdns.org/api/badge/8/uptime?label=Uptime%20in%2024h"/>
     <img src="https://img.shields.io/badge/Version-1.0.0-green"/>
 </div>
+
+[![Backend Deploy](https://github.com/yetJunior/guhaejojibsa-backend/actions/workflows/deploy.yml/badge.svg)](https://github.com/yetJunior/guhaejojibsa-backend/actions/workflows/deploy.yml)
+[![Frontend Deploy](https://github.com/yetJunior/guhaejojibsa-frontend/actions/workflows/deploy.yml/badge.svg)](https://github.com/yetJunior/guhaejojibsa-frontend/actions/workflows/deploy.yml)
 <br>
 
 ---
