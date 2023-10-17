@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Box, Container, Grid, Paper, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material';
+import { Box, Container, Grid, Paper, Table, TableBody, TableCell, TableRow, Typography, Button } from '@mui/material';
 import { getOrderHandler } from '../../store/auth-action';
 import { getFormattedDate, getFormattedTime } from '../../util/dateUtil';
 import axiosUtils from '../../uitls/axiosUtils';
@@ -84,6 +84,10 @@ const OrderDetailPage: React.FC = () => {
     navigate(`/article/detail/${orderDetailResponse.articleApiId}`);
   };
 
+  const handleOpenReceiptDetail = () => {
+    window.open(`/article/${articleApiId}/order/${orderApiId}/${orderDetailResponse.receiptApiId}`, '_blank');
+  };
+
   const time = getFormattedDate(orderDetailResponse.date) + getFormattedTime(orderDetailResponse.date);
 
   return (
@@ -149,6 +153,20 @@ const OrderDetailPage: React.FC = () => {
               <TableRow>
                 <StyledTableCell variant="head">주문자 이름</StyledTableCell>
                 <TableCell>{orderDetailResponse.consumerName}</TableCell>
+              </TableRow>
+              <TableRow>
+                <StyledTableCell variant="head">영수증 상세</StyledTableCell>
+                <TableCell>
+                  <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={handleOpenReceiptDetail}
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                  >
+                    영수증 보기
+                  </Button>
+                </TableCell>
               </TableRow>
             </TableBody>
           </Table>

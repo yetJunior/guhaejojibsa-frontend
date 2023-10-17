@@ -175,7 +175,7 @@ const baseUrl = import.meta.env.VITE_API;
               `${baseUrl}oauth2/authorization/google`)
             }
           >
-            <img src="/src/assets/google.png"
+            <img src="/img/login/google.png"
               alt="Google 로그인"
               style={{ width: '24px', height: '24px' }}
             />
@@ -189,7 +189,7 @@ const baseUrl = import.meta.env.VITE_API;
             }
           >
             <img
-              src="/src/assets/naver.png"
+              src="/img/login/naver.png"
               alt="Naver 로그인"
               style={{ width: '24px', height: '24px' }}
             />

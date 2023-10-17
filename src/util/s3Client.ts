@@ -3,7 +3,7 @@ import {v4 as uuidv4} from 'uuid';
 import { result } from 'lodash';
 
 // Set the AWS Region.
-const REGION = 'ap-northeast-2'; //e.g. "ap-northeast-2"
+const REGION = import.meta.env.VITE_S3_REGION; //e.g. "ap-northeast-2"
 const CREDENTIAL = {
   AWS_ACCESS_KEY_ID: import.meta.env.VITE_S3_ACCESS_KEY,
   AWS_SECRET_ACCESS_KEY: import.meta.env.VITE_S3_SECRET_ACCESS_KEY,
@@ -17,6 +17,8 @@ const s3Client = new S3Client({
     accessKeyId: CREDENTIAL.AWS_ACCESS_KEY_ID,
     secretAccessKey: CREDENTIAL.AWS_SECRET_ACCESS_KEY,
   },
+  endpoint: import.meta.env.VITE_S3_ENDPOINT,
+  forcePathStyle: true,
 });
 
 // function uuidv4() {
@@ -37,7 +39,7 @@ const uploadImagesToS3 = async (imageFiles: any, imageType: S3ImageType) => {
     // 각 이미지 파일을 S3에 업로드
     for (let i = 0; i < imageFiles.length; i++) {
       //  article/2023/09/05/10:20:00_uuid.png
-      const objectKey = `${imageType}/${now.getFullYear()}/${
+      const objectKey = `public/${imageType}/${now.getFullYear()}/${
         now.getMonth() + 1
       }/${now.getDate()}/${now.toLocaleTimeString(
         'en-us',

@@ -47,7 +47,6 @@ import { Carousel } from 'react-responsive-carousel';
 import axiosUtils from '../../uitls/axiosUtils.ts';
 import DeleteIcon from "@mui/icons-material/Delete";
 
-// const baseUrl = 'http://localhost:8080/api/articles/';
 const baseUrl = import.meta.env.VITE_API + '/api/articles/';
 
 function getArticleApiId() {
@@ -264,7 +263,7 @@ export function ArticleDetail() {
         <StyledCard>
           {article.images.length == 0 ? (
             <StyledCardMedia
-              image="/img/favicon.png"
+              image="/img/article/article_placeholder.png"
               sx={{
                 aspectRatio: ' 1 / 1', // 이미지의 가로세로 비율을 자동으로 조정합니다.
               }}

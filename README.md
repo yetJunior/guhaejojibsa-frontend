@@ -1,3 +1,4 @@
+
 # 🐶 구해줘 집사
 
 ## 🐾 프로젝트 주제
@@ -13,10 +14,19 @@
 |    기간     |                               2023.08.09 ~ 2023.xx.xx                                |
 |   배포 링크   |                         [🌐link](http://guhaejo-jibsa.site/)                         |
 | API 문서 링크 |                      [📗link](http://docs.guhaejo-jibsa.site/)                       |
-|  서버 모니터링  |       [🖥️link](https://mon0mon-uptime-main.duckdns.org/status/guhaejo-jibsa)        |
-|  프로젝트 문서  | [📝link](https://mon0mon-outline.duckdns.org/s/13b50e7f-b702-4b91-acb1-3e6f7ce32ab4) |
-|  예제 동영상   |                                      [📹link](https://youtu.be/xMsFRTb-t4Q)                                      |
+|  서버 모니터링  |          [🖥️link](https://uptime.mon0mon.duckdns.org/status/guhaejo-jibsa)          |
+|  프로젝트 문서  | [📝link](https://outline.mon0mon.duckdns.org/s/13b50e7f-b702-4b91-acb1-3e6f7ce32ab4) |
+|  예제 동영상   |                        [📹link](https://youtu.be/xMsFRTb-t4Q)                        |
 
+<div>
+    <img src="https://uptime.mon0mon.duckdns.org/api/badge/8/status?label=Status&labelPrefix=Back&upLabel=online&downLabel=offline"/>
+    <img src="https://uptime.mon0mon.duckdns.org/api/badge/8/ping?24&label=Ping%20in%2024h"/>
+    <img src="https://uptime.mon0mon.duckdns.org/api/badge/8/uptime?label=Uptime%20in%2024h"/>
+    <img src="https://img.shields.io/badge/Version-1.0.0-green"/>
+</div>
+
+[![Backend Deploy](https://github.com/yetJunior/guhaejojibsa-backend/actions/workflows/deploy.yml/badge.svg)](https://github.com/yetJunior/guhaejojibsa-backend/actions/workflows/deploy.yml)
+[![Frontend Deploy](https://github.com/yetJunior/guhaejojibsa-frontend/actions/workflows/deploy.yml/badge.svg)](https://github.com/yetJunior/guhaejojibsa-frontend/actions/workflows/deploy.yml)
 <br>
 
 ---
