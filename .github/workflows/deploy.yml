@@ -33,71 +33,29 @@ jobs:
         with:
           node-version: 20
 
-#      # (3) npm install
-#      - name: Npm Install
-#        run: npm ci
+      # (3) npm install
+      - name: install dependencies
+        run: npm install
 
-      # (3) .env.production 세팅
+      # (4) .env.production 세팅
       - name: Set secret file (prod)
         run: |
-          pwd
-          ls -la
           touch ./.env.production
           echo "${{ secrets.ENV_PRODUCTION }}" > ./.env.production
           chmod 600 ./.env.production
-          pwd
-          ls -la
-          cat .env.production
 
-      # (4) package.json의 있는 version을 기반으로 값을 불러옴
-      - name: get-npm-version
-        id: package-version
-        uses: martinbeentjes/npm-get-version-action@v1.3.1
+      # (5) npm build
+      - name: build static file
+        run: npm build
 
-      # (5) Docker Buildx를 위한 QEMU 세팅
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      # (6) 크로스 플랫폼 빌드를 위한 Buildx 세팅
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      # (7) Docker Hub 로그인
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
+      # (6) deploy to server
+      - name: copy file via ssh password
+        uses: appleboy/scp-action@v0.1.4
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_ACCESSTOKEN }}
-
-      # (8) Docker build 및 push
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: |
-            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
-            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ steps.package-version.outputs.current-version}}
-
-#      # (7) Docker Hub에 private 이미지로 푸시
-#      - name: Push Docker image to Docker Hub
-#        run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ steps.package-version.outputs.current-version}}
-
-      # (9) Deploy to Front Server
-      - name: Deploy to Front Server
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.FRONT_IP }} # Front Server IP
-          username: ${{ secrets.FRONT_USERNAME }}
-          password: ${{ secrets.FRONT_PASSWORD }}
-#          key: ${{ secrets.FRONT_ACCESS }}
-          port: ${{ secrets.FRONT_PORT }} # 접속포트
-          script: |
-            date >> ~/gj-front-log.txt
-            docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_ACCESSTOKEN }}"
-            docker stop gj_front || true
-            docker rm gj_front || true
-            docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest || true
-            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
-            docker run -d --label io.portainer.accesscontrol.users=gjuser --restart always --name gj_front guhaejojibsa621/guhaejo_jibsa_front:latest
-#            docker run -d --name gj-front ${{ secrets.DOCKER_DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          source: "dist/*"
+          target: ${{ secrets.TARGET_DIR }}
+          overwrite: true
