@@ -46,7 +46,7 @@ jobs:
 
       # (5) npm build
       - name: build static file
-        run: npm build
+        run: npm run build
 
       # (6) deploy to server
       - name: copy file via ssh password
