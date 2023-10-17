@@ -58,4 +58,5 @@ jobs:
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           source: "dist/*"
           target: ${{ secrets.TARGET_DIR }}
+          strip_components: 1
           overwrite: true
