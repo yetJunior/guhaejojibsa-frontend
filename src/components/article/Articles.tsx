@@ -19,7 +19,7 @@ const Articles = () => {
   };
 
   const redirectPost = () => {
-    navigate(`/post`);
+    navigate(`post`);
   }
 
   return (
