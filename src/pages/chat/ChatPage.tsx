@@ -47,7 +47,7 @@ const ChatPage: React.FC = () => {
 
     // STOMP 클라이언트 초기화및 설정
     stompClient.current = new Stomp.Client({
-      brokerURL: `ws://${getApiServerUrl()}/ws`,
+      brokerURL: `wss://${getApiServerUrl()}/ws`,
       connectHeaders: {
         Authorization: authorizationToken,
       },
