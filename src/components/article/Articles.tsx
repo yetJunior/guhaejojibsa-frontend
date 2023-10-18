@@ -5,16 +5,22 @@ import SearchInputMui from './SearchInputMui.tsx';
 import Button from '@mui/material/Button';
 import { AddBox } from '@mui/icons-material';
 import { useEffect, useRef, useState } from 'react';
+import {useNavigate} from "react-router-dom";
 
 const Articles = () => {
   const [title, setTitle] = useState();
   //  asc, desc
   const [order, setOrder] = useState();
   const childRef = useRef(null);
+  const navigate = useNavigate();
 
   const onClickSubmit = () => {
     childRef.current.submitSearchParam(title, order);
   };
+
+  const redirectPost = () => {
+    navigate(`post`);
+  }
 
   return (
     <Container>
@@ -30,7 +36,7 @@ const Articles = () => {
           border: '1px solid #d0d0d0',
           // boxShadow: 4,
         }}>
-        <Button variant="contained" startIcon={<AddBox />} href="/article/post">
+        <Button variant="contained" startIcon={<AddBox />} onClick={redirectPost}>
           글쓰기
         </Button>
         <SearchInputMui

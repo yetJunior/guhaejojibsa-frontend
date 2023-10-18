@@ -29,6 +29,10 @@ const getApiServerUrl = () => {
   return ary[ary.length-2];
 }
 
+const getWebSocketProtocol = () => {
+  return import.meta.env.VITE_WS_PROTOCOL;
+}
+
 const ChatPage: React.FC = () => {
   const stompClient = useRef<Stomp.Client | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -47,7 +51,7 @@ const ChatPage: React.FC = () => {
 
     // STOMP 클라이언트 초기화및 설정
     stompClient.current = new Stomp.Client({
-      brokerURL: `ws://${getApiServerUrl()}/ws`,
+      brokerURL: `${getWebSocketProtocol()}://${getApiServerUrl()}/ws`,
       connectHeaders: {
         Authorization: authorizationToken,
       },
