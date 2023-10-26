@@ -10,10 +10,10 @@ import {
 import {
   Article,
   ArticleImpl,
-  getChipColorByArticleStatus,
+  getChipColorByArticleStatus, getChipColorByArticleType,
 } from '../../types/article.ts';
-import { useNavigate } from 'react-router-dom';
-import { formatPrice } from '../../util/formatPrice.ts';
+import {useNavigate} from 'react-router-dom';
+import {formatPrice} from '../../util/formatPrice.ts';
 
 type AlbumCardProps = {
   article: ArticleImpl;
@@ -22,14 +22,14 @@ type AlbumCardProps = {
 };
 
 export const AlbumCard = (props: AlbumCardProps) => {
-  const { article, style } = props;
+  const {article, style} = props;
   const navigate = useNavigate();
 
   return (
     <Card
-      sx={{ maxWidth: style.width, margin: style.margin, boxShadow: 6 }}
+      sx={{maxWidth: style.width, margin: style.margin, boxShadow: 6}}
       onClick={() => {
-        navigate(`/article/detail/${props.detail}`, { replace: false });
+        navigate(`/article/detail/${props.detail}`, {replace: false});
       }}>
       <CardActionArea>
         <Box
@@ -57,20 +57,40 @@ export const AlbumCard = (props: AlbumCardProps) => {
             alt="place holder image"
           />
         </Box>
-        <CardContent sx={{ marginTop: '10px', paddingTop: 0 }}>
-          <Chip
-            label={article.articleStatus}
-            size="small"
-            color={getChipColorByArticleStatus(article.articleStatus)}
-            sx={{
-              marginBottom: 1,
-              color: '#FFFFFF',
-              fontWeight: 'bold',
-              textTransform: 'uppercase',
-              //  투명도
-              // backgroundColor: `${theme.palette.primary.main}D8`,
-            }}
-          />
+        <CardContent sx={{marginTop: '0px', paddingTop: 0}}>
+          <Box sx={{
+            display: 'flex',
+            marginX: '10px',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            <Chip
+              label={article.articleStatus}
+              size="small"
+              color={getChipColorByArticleStatus(article.articleStatus)}
+              sx={{
+                marginBottom: 1,
+                color: '#FFFFFF',
+                fontWeight: 'bold',
+                textTransform: 'uppercase',
+                //  투명도
+                // backgroundColor: `${theme.palette.primary.main}D8`,
+              }}
+            />
+            <Chip
+              label={article.articleType}
+              size="small"
+              color={getChipColorByArticleType(article.articleType)}
+              sx={{
+                marginBottom: 1,
+                color: '#FFFFFF',
+                fontWeight: 'bold',
+                textTransform: 'uppercase',
+                //  투명도
+                // backgroundColor: `${theme.palette.primary.main}D8`,
+              }}
+            />
+          </Box>
           <Typography variant="h6" gutterBottom>
             {article.title.length > 15
               ? article.title.slice(0, 15) + '....'
@@ -80,7 +100,7 @@ export const AlbumCard = (props: AlbumCardProps) => {
           <Typography
             variant="body2"
             color="text.secondary"
-            sx={{ marginTop: 1, marginBottom: 1 }}>
+            sx={{marginTop: 1, marginBottom: 1}}>
             작성자:{' '}
             {article.username.length > 10
               ? article.username.slice(0, 10) + '...'
