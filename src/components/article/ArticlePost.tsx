@@ -68,8 +68,8 @@ export function ArticlePost() {
   const [errorPrice, setErrorPrice] = useState<boolean>(false);
   const [errorDescription, setErrorDescription] = useState<boolean>(false);
   const [articleType, setArticleType] = useState<ArticleType>("SELL");
-  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
-  const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
+  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs().add(1, 'minute'));
+  const [endDate, setEndDate] = useState<Dayjs | null>(dayjs().add(1, 'hour'));
 
   const handleImageChange = (event) => {
     let newImageFiles = Array.from(event.target.files);
@@ -234,7 +234,8 @@ export function ArticlePost() {
                 label={'시작 날짜'}
               >
                 <DateTimePicker
-                  // value={startDate}
+                  value={startDate}
+                  disablePast
                   onChange={(newValue: Dayjs) => {
                     setStartDate(newValue)
                   }}
@@ -245,7 +246,8 @@ export function ArticlePost() {
                 label={'끝 날짜'}
               >
                 <DateTimePicker
-                  // value={endDate}
+                  value={endDate}
+                  disablePast
                   onChange={(newValue: Dayjs) => {
                     setEndDate(newValue)
                   }}

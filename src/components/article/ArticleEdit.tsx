@@ -99,8 +99,8 @@ export function ArticleEdit() {
   const [errorPrice, setErrorPrice] = useState<boolean>(false);
   const [errorDescription, setErrorDescription] = useState<boolean>(false);
   const [articleType, setArticleType] = useState<ArticleType>("SELL");
-  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
-  const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
+  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs().add(1, 'minute'));
+  const [endDate, setEndDate] = useState<Dayjs | null>(dayjs().add(1, 'hour'));
 
   const articleTypeHandleChange = (event: SelectChangeEvent) => {
     setArticleType(event.target.value as ArticleType);
@@ -378,6 +378,7 @@ export function ArticleEdit() {
                   >
                     <DateTimePicker
                       value={startDate}
+                      disablePast
                       onChange={(newValue: Dayjs) => {
                         setStartDate(newValue)
                       }}
@@ -389,6 +390,7 @@ export function ArticleEdit() {
                   >
                     <DateTimePicker
                       value={endDate}
+                      disablePast
                       onChange={(newValue: Dayjs) => {
                         setEndDate(newValue)
                       }}
