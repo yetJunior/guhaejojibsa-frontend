@@ -7,6 +7,7 @@ import Footer from './components/organisms/Footer';
 import Navigation from './components/organisms/Navigation';
 import UserRouter from './router/UserRouter';
 import useStores from './store/useStores';
+import dayjs from "dayjs";
 
 const StyledMain = styled.main`
   display: block;
@@ -21,6 +22,8 @@ const StyledMain = styled.main`
 
 function App() {
   const useStore = useStores();
+
+  dayjs.locale('ko')
 
   useEffect(() => {
     // localStorage.clear();
