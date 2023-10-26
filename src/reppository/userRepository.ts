@@ -8,7 +8,7 @@ class userRepsoitory {
   };
 
   signup = (data: any) => {
-    return axiosUtils.post('/user/signup', data);
+    return axiosUtils.post('/auth/signup', data);
   };
 
   oauthSignup = (data: any) => {
