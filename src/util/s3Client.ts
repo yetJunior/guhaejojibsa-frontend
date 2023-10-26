@@ -34,7 +34,6 @@ const uploadImagesToS3 = async (imageFiles: any, imageType: S3ImageType) => {
     hour12: false,
     timeZone: 'Asia/Seoul',
   };
-  console.log(imageFiles);
   try {
     // 각 이미지 파일을 S3에 업로드
     for (let i = 0; i < imageFiles.length; i++) {
@@ -55,8 +54,6 @@ const uploadImagesToS3 = async (imageFiles: any, imageType: S3ImageType) => {
 
       // 이미지를 S3에 업로드
       const result = await s3Client.send(new PutObjectCommand(params));
-
-      console.log(`Uploaded image ${objectKey} to S3`);
     }
 
     // 모든 이미지가 업로드되었을 때 반환 또는 다른 처리를 수행
