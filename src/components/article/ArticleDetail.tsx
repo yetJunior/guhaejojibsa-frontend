@@ -20,7 +20,7 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
+  DialogTitle, FormControl, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select,
   Skeleton,
   SpeedDial,
   SpeedDialAction,
@@ -37,7 +37,7 @@ import { createChatroom, createOrder } from '../../store/auth-action.tsx';
 import useStores from '../../store/useStores.ts';
 import {
   ArticleImpl,
-  getChipColorByArticleStatus,
+  getChipColorByArticleStatus, getChipColorByArticleType,
 } from '../../types/article.ts';
 import { Chatroom } from '../../types/chat.ts';
 import { loadingTime } from '../../util/loadingUtil.ts';
@@ -46,6 +46,10 @@ import { formatPrice } from '../../util/formatPrice.ts';
 import { Carousel } from 'react-responsive-carousel';
 import axiosUtils from '../../uitls/axiosUtils.ts';
 import DeleteIcon from "@mui/icons-material/Delete";
+import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {DemoContainer, DemoItem} from "@mui/x-date-pickers/internals/demo";
+import dayjs, {Dayjs} from "dayjs";
 
 const baseUrl = import.meta.env.VITE_API + '/api/articles/';
 
@@ -102,9 +106,12 @@ export function ArticleDetail() {
     thumbnail: null,
     status: 'ACTIVE',
     articleStatus: 'LIVE',
+    articleType: 'SELL',
     createdDate: '1970-01-01 12:00:00',
     price: 1000,
     images: null,
+    startDate: null,
+    endDate: null
   });
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
@@ -126,9 +133,12 @@ export function ArticleDetail() {
           thumbnail: response.data.thumbnail,
           status: response.data.status,
           articleStatus: response.data.articleStatus,
+          articleType: response.data.articleType,
           createdDate: response.data.createdDate,
           price: response.data.price,
           images: response.data.images,
+          startDate: response.data.startDate,
+          endDate: response.data.endDate
         });
         //  TODO DEBUG용
         setTimeout(() => setLoading(false), loadingTime);
@@ -302,11 +312,39 @@ export function ArticleDetail() {
                 alignItems: 'start',
                 alignContent: 'start',
               }}>
-              <Chip
-                size="small"
-                label={article.articleStatus}
-                color={getChipColorByArticleStatus(article.articleStatus)}
-              />
+              <Box sx={{
+                display: 'flex',
+                marginX: '10px',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}>
+                <Chip
+                  label={article.articleStatus}
+                  size="small"
+                  color={getChipColorByArticleStatus(article.articleStatus)}
+                  sx={{
+                    marginBottom: 1,
+                    color: '#FFFFFF',
+                    fontWeight: 'bold',
+                    textTransform: 'uppercase',
+                    //  투명도
+                    // backgroundColor: `${theme.palette.primary.main}D8`,
+                  }}
+                />
+                <Chip
+                  label={article.articleType}
+                  size="small"
+                  color={getChipColorByArticleType(article.articleType)}
+                  sx={{
+                    marginBottom: 1,
+                    color: '#FFFFFF',
+                    fontWeight: 'bold',
+                    textTransform: 'uppercase',
+                    //  투명도
+                    // backgroundColor: `${theme.palette.primary.main}D8`,
+                  }}
+                />
+              </Box>
               <Typography gutterBottom variant="h4" component="div">
                 {article.title}
               </Typography>
@@ -325,6 +363,32 @@ export function ArticleDetail() {
                 {formatPrice(article.price)}
               </Typography>
               <Typography variant="body2">{article.createdDate}</Typography>
+              <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer
+                    components={['DateTimePicker', 'DateTimePicker', 'DateTimePicker']}
+                  >
+                    <DemoItem
+                      label={'시작 날짜'}
+                    >
+                      <DateTimePicker
+                        readOnly
+                        value={dayjs(article.startDate)}
+                        views={['year', 'month', 'day', 'hours', 'minutes']}
+                      />
+                    </DemoItem>
+                    <DemoItem
+                      label={'끝 날짜'}
+                    >
+                      <DateTimePicker
+                        readOnly
+                        value={dayjs(article.endDate)}
+                        views={['year', 'month', 'day', 'hours', 'minutes']}
+                      />
+                    </DemoItem>
+                  </DemoContainer>
+                </LocalizationProvider>
+              </Box>
             </Box>
             <Box
               sx={{

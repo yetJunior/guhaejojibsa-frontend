@@ -1,4 +1,4 @@
-import { HideImage, InsertPhoto } from '@mui/icons-material';
+import {HideImage, InsertPhoto} from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
 import {
   Alert,
@@ -12,20 +12,27 @@ import {
   OutlinedInput,
   Stack,
   TextField,
-  styled,
+  styled, Select, MenuItem, SelectChangeEvent,
 } from '@mui/material';
-import { useState } from 'react';
-import { Carousel } from 'react-responsive-carousel';
+import {useState} from 'react';
+import {Carousel} from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {
   postArticleHandler
 } from '../../store/auth-action.tsx';
 import {
+  ArticleType,
   checkArticleInputValidation
 } from '../../types/article.ts';
-import { uploadImagesToS3 } from '../../util/s3Client.ts';
-import { priceValidation, textValidation } from '../../util/validationUtil.ts';
+import {uploadImagesToS3} from '../../util/s3Client.ts';
+import {priceValidation, textValidation} from '../../util/validationUtil.ts';
+import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {DemoContainer, DemoItem} from "@mui/x-date-pickers/internals/demo";
+import {Dayjs} from "dayjs";
+import * as dayjs from "dayjs";
+import {getFormattedISODateTime} from "../../util/dateUtil.ts";
 
 const StyledArticleDetail = styled('div')({
   display: 'flex',
@@ -48,8 +55,6 @@ const StyledTextField = styled(TextField)({
   marginBottom: '15px',
 });
 
-// ... (이전 코드)
-
 export function ArticlePost() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -62,6 +67,9 @@ export function ArticlePost() {
   const [errorTitle, setErrorTitle] = useState<boolean>(false);
   const [errorPrice, setErrorPrice] = useState<boolean>(false);
   const [errorDescription, setErrorDescription] = useState<boolean>(false);
+  const [articleType, setArticleType] = useState<ArticleType>("SELL");
+  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs().add(1, 'minute'));
+  const [endDate, setEndDate] = useState<Dayjs | null>(dayjs().add(1, 'hour'));
 
   const handleImageChange = (event) => {
     let newImageFiles = Array.from(event.target.files);
@@ -78,6 +86,10 @@ export function ArticlePost() {
     );
     setImagePreviews(newImagePreviews);
   };
+
+  const articleTypeHandleChange = (event: SelectChangeEvent) => {
+    setArticleType(event.target.value as ArticleType);
+  }
 
   const validation = () => {
     const str = checkArticleInputValidation(title, description, price);
@@ -100,9 +112,9 @@ export function ArticlePost() {
     try {
       uploadImagesToS3(imageFiles, 'article').then((result) => {
         if (result) {
-          console.log('All images uploaded successfully.');
-          console.log(result);
-          postArticleHandler(title, description, price, result).then(
+          postArticleHandler(
+            title, description, price, result,
+            articleType, getFormattedISODateTime(startDate.toDate()), getFormattedISODateTime(endDate.toDate())).then(
             (response) => {
               if (response != null) {
                 console.log('Article posted successfully:', response.data);
@@ -131,10 +143,10 @@ export function ArticlePost() {
 
   const onChangePrice = (event: React.ChangeEvent<HTMLInputElement>) => {
     !priceValidation(Number(event.target.value))
-        ? setErrorPrice(true)
-        : setErrorPrice(false);
+      ? setErrorPrice(true)
+      : setErrorPrice(false);
     setPrice(Number(event.target.value));
-};
+  };
 
   const onChangeDescription = (event: React.ChangeEvent<HTMLInputElement>) => {
     !textValidation(event.target.value)
@@ -170,11 +182,11 @@ export function ArticlePost() {
             ))}
           </Carousel>
         </Box>
-        <Box sx={{ marginBottom: '20px' }}>
+        <Box sx={{marginBottom: '20px'}}>
           <Collapse in={alertOpen}>
             <Stack>
               <Alert
-                sx={{ whiteSpace: 'pre-line', textAlign: 'start' }}
+                sx={{whiteSpace: 'pre-line', textAlign: 'start'}}
                 severity="error"
                 onClose={() => {
                   setAlertOpen(false);
@@ -184,8 +196,8 @@ export function ArticlePost() {
             </Stack>
           </Collapse>
         </Box>
-        <Box>
-          <FormControl sx={{ marginY: '10px' }}>
+        <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+          <FormControl sx={{marginY: '10px', marginX: '10px'}}>
             <InputLabel htmlFor="article-price">가격</InputLabel>
             <OutlinedInput
               id="article-price"
@@ -201,16 +213,59 @@ export function ArticlePost() {
               maxRows="1"
             />
           </FormControl>
+          <FormControl sx={{marginY: '10px', marginX: '10px'}}>
+            <InputLabel id="article-type-select-label">구매/판매</InputLabel>
+            <Select
+              labelId="article-type-select-label"
+              id="article-type-select"
+              value={articleType}
+              label="구매/판매"
+              onChange={articleTypeHandleChange}
+            >
+              <MenuItem value={"SELL"}>판매</MenuItem>
+              <MenuItem value={"BUY"}>구매</MenuItem>
+            </Select>
+          </FormControl>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer
+              components={['DateTimePicker', 'DateTimePicker', 'DateTimePicker']}
+            >
+              <DemoItem
+                label={'시작 날짜'}
+              >
+                <DateTimePicker
+                  value={startDate}
+                  disablePast
+                  onChange={(newValue: Dayjs) => {
+                    setStartDate(newValue)
+                  }}
+                  views={['year', 'month', 'day', 'hours', 'minutes']}
+                />
+              </DemoItem>
+              <DemoItem
+                label={'끝 날짜'}
+              >
+                <DateTimePicker
+                  value={endDate}
+                  disablePast
+                  onChange={(newValue: Dayjs) => {
+                    setEndDate(newValue)
+                  }}
+                  views={['year', 'month', 'day', 'hours', 'minutes']}
+                />
+              </DemoItem>
+            </DemoContainer>
+          </LocalizationProvider>
         </Box>
         <Box>
           <StyledTextField
             id="article-title"
             label="게시글 제목"
             value={title}
-            inputProps={{ maxLength: 100 }}
+            inputProps={{maxLength: 100}}
             onChange={onChangeTitle}
             error={errorTitle}
-            style={{ width: '100%' }} // 여기에서 너비 조절
+            style={{width: '100%'}} // 여기에서 너비 조절
           />
         </Box>
         <Box>
@@ -221,7 +276,7 @@ export function ArticlePost() {
             multiline
             rows={7}
             value={description}
-            inputProps={{ maxLength: 255, 'aria-rowcount': 5 }} // Set maximum character length
+            inputProps={{maxLength: 255, 'aria-rowcount': 5}} // Set maximum character length
             onChange={onChangeDescription}
             error={errorDescription}
           />
@@ -235,15 +290,15 @@ export function ArticlePost() {
               type="file"
               multiple
               onChange={handleImageChange}
-              style={{ display: 'none' }}
+              style={{display: 'none'}}
             />
             <label htmlFor="image-file">
               <Button
                 variant="contained"
                 color="primary"
                 component="span"
-                startIcon={<InsertPhoto />}
-                sx={{ marginTop: '15px', marginEnd: '10px' }}>
+                startIcon={<InsertPhoto/>}
+                sx={{marginTop: '15px', marginEnd: '10px'}}>
                 이미지 첨부
               </Button>
             </label>
@@ -252,9 +307,9 @@ export function ArticlePost() {
                 variant="contained"
                 color="error"
                 component="span"
-                startIcon={<HideImage />}
+                startIcon={<HideImage/>}
                 onClick={onClickRemoveImages}
-                sx={{ marginTop: '15px', marginX: '10px' }}>
+                sx={{marginTop: '15px', marginX: '10px'}}>
                 이미지 삭제
               </Button>
             ) : null}
@@ -263,8 +318,8 @@ export function ArticlePost() {
             variant="contained"
             color="primary"
             onClick={handleSubmit}
-            startIcon={<EditIcon />}
-            sx={{ marginTop: '15px' }}>
+            startIcon={<EditIcon/>}
+            sx={{marginTop: '15px'}}>
             게시글 작성
           </Button>
         </Box>

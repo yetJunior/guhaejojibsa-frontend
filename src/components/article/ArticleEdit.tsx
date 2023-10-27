@@ -1,4 +1,4 @@
-import { CalendarMonth, HideImage, InsertPhoto } from '@mui/icons-material';
+import {CalendarMonth, HideImage, InsertPhoto} from '@mui/icons-material';
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from '@mui/icons-material/Edit';
 import {
@@ -11,28 +11,34 @@ import {
   FormControl,
   FormControlLabel,
   InputAdornment,
-  InputLabel,
-  OutlinedInput,
+  InputLabel, MenuItem,
+  OutlinedInput, Select, SelectChangeEvent,
   Skeleton,
   Stack,
   Switch,
   TextField
 } from '@mui/material';
 import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
-import { useEffect, useState } from 'react';
-import { Carousel } from 'react-responsive-carousel';
-import { useNavigate } from 'react-router-dom';
-import { putArticleHandler } from '../../store/auth-action.tsx';
+import {styled} from '@mui/material/styles';
+import {useEffect, useState} from 'react';
+import {Carousel} from 'react-responsive-carousel';
+import {useNavigate} from 'react-router-dom';
+import {putArticleHandler} from '../../store/auth-action.tsx';
 import useStores from '../../store/useStores.ts';
 import {
-  ArticleStatus,
+  ArticleStatus, ArticleType,
   checkArticleInputValidation,
 } from '../../types/article.ts';
 import axiosUtils from '../../uitls/axiosUtils.ts';
-import { loadingTime } from '../../util/loadingUtil.ts';
-import { uploadImagesToS3 } from '../../util/s3Client.ts';
-import { priceValidation, textValidation } from '../../util/validationUtil.ts';
+import {loadingTime} from '../../util/loadingUtil.ts';
+import {uploadImagesToS3} from '../../util/s3Client.ts';
+import {priceValidation, textValidation} from '../../util/validationUtil.ts';
+import {Dayjs} from "dayjs";
+import * as dayjs from "dayjs";
+import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {DemoContainer, DemoItem} from "@mui/x-date-pickers/internals/demo";
+import {getFormattedISODateTime} from "../../util/dateUtil.ts";
 
 const baseUrl = '/articles/';
 
@@ -92,6 +98,13 @@ export function ArticleEdit() {
   const [errorTitle, setErrorTitle] = useState<boolean>(false);
   const [errorPrice, setErrorPrice] = useState<boolean>(false);
   const [errorDescription, setErrorDescription] = useState<boolean>(false);
+  const [articleType, setArticleType] = useState<ArticleType>("SELL");
+  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs().add(1, 'minute'));
+  const [endDate, setEndDate] = useState<Dayjs | null>(dayjs().add(1, 'hour'));
+
+  const articleTypeHandleChange = (event: SelectChangeEvent) => {
+    setArticleType(event.target.value as ArticleType);
+  }
 
   const handleImageChange = (event) => {
     let newImageFiles = Array.from(event.target.files);
@@ -106,7 +119,7 @@ export function ArticleEdit() {
     const newImagePreviews = newImageFiles.map((file) =>
       URL.createObjectURL(file as Blob) // 타입 단언을 사용하여 'Blob' 타입으로 변환
     );
-    
+
     setImagePreviews(newImagePreviews);
   };
 
@@ -117,7 +130,7 @@ export function ArticleEdit() {
     return !str;
   };
 
-  const handleDelete = async() => {
+  const handleDelete = async () => {
     axiosUtils.delete(baseUrl + getArticleApiId()).then((res) => {
       if (res.status === 200) {
         navigate('/article');
@@ -136,8 +149,6 @@ export function ArticleEdit() {
 
     uploadImagesToS3(imageFiles, 'article').then((result) => {
       if (result) {
-        console.log('All images uploaded successfully.');
-        console.log(result);
         try {
           putArticleHandler(
             title,
@@ -145,7 +156,10 @@ export function ArticleEdit() {
             apiId,
             articleStatus as ArticleStatus,
             result,
-            price
+            price,
+            articleType,
+            getFormattedISODateTime(startDate.toDate()),
+            getFormattedISODateTime(endDate.toDate())
           ).then((response) => {
             if (response != null) {
               console.log('Article posted successfully:', response.data);
@@ -192,6 +206,8 @@ export function ArticleEdit() {
         setOpenLabel(
           response.data.articleStatus === 'LIVE' ? '공개' : '비공개'
         );
+        setStartDate(dayjs(response.data.startDate))
+        setEndDate(dayjs(response.data.endDate))
         setTimeout(() => setLoading(false), loadingTime);
       })
       .catch((error) => {
@@ -218,11 +234,11 @@ export function ArticleEdit() {
   const onChangePrice = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
     const priceValue = parseFloat(inputValue); // 문자열을 숫자로 변환
-  
+
     !priceValidation(priceValue)
       ? setErrorPrice(true)
       : setErrorPrice(false);
-  
+
     setPrice(priceValue);
   };
 
@@ -249,10 +265,11 @@ export function ArticleEdit() {
               image="https://via.placeholder.com/1920x1080.png?text=via%20placeholder.com"
               sx={{
                 aspectRatio: ' 1/1', // 이미지의 가로세로 비율을 자동으로 조정합니다.
+                marginTop: '10px'
               }}
             />
           ) : (
-            <Box>
+            <Box marginTop={'10px'}>
               <Carousel showArrows={true} infiniteLoop={true} selectedItem={0}>
                 {oldImageFiles.map((preview, index) => (
                   <div
@@ -322,14 +339,8 @@ export function ArticleEdit() {
                 />
               </Box>
             </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                alignContent: 'center',
-              }}>
-              <FormControl sx={{marginY: '10px'}}>
+            <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+              <FormControl sx={{marginY: '10px', marginX: '10px'}}>
                 <InputLabel htmlFor="article-price">가격</InputLabel>
                 <OutlinedInput
                   id="article-price"
@@ -345,6 +356,51 @@ export function ArticleEdit() {
                   maxRows="1"
                 />
               </FormControl>
+              <FormControl sx={{marginY: '10px', marginX: '10px'}}>
+                <InputLabel id="article-type-select-label">구매/판매</InputLabel>
+                <Select
+                  labelId="article-type-select-label"
+                  id="article-type-select"
+                  value={articleType}
+                  label="구매/판매"
+                  onChange={articleTypeHandleChange}
+                >
+                  <MenuItem value={"SELL"}>판매</MenuItem>
+                  <MenuItem value={"BUY"}>구매</MenuItem>
+                </Select>
+              </FormControl>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer
+                  components={['DateTimePicker', 'DateTimePicker', 'DateTimePicker']}
+                >
+                  <DemoItem
+                    label={'시작 날짜'}
+                  >
+                    <DateTimePicker
+                      value={startDate}
+                      disablePast
+                      onChange={(newValue: Dayjs) => {
+                        setStartDate(newValue)
+                      }}
+                      views={['year', 'month', 'day', 'hours', 'minutes']}
+                    />
+                  </DemoItem>
+                  <DemoItem
+                    label={'끝 날짜'}
+                  >
+                    <DateTimePicker
+                      value={endDate}
+                      disablePast
+                      onChange={(newValue: Dayjs) => {
+                        setEndDate(newValue)
+                      }}
+                      views={['year', 'month', 'day', 'hours', 'minutes']}
+                    />
+                  </DemoItem>
+                </DemoContainer>
+              </LocalizationProvider>
+            </Box>
+            <Box>
               <TextField
                 id="article-title"
                 defaultValue={title}

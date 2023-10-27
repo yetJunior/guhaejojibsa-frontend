@@ -1,5 +1,6 @@
-import { ArticleStatus } from '../types/article.ts';
+import {ArticleStatus, ArticleType} from '../types/article.ts';
 import axiosUtils from '../uitls/axiosUtils.ts';
+import {getFormattedISODateTime} from "../util/dateUtil.ts";
 
 export const getArticleHandler = (articleApiId: any) => {
   const URL = `/articles/${articleApiId}`;
@@ -126,10 +127,21 @@ export const postArticleHandler = (
   title: string,
   description: string,
   price: number,
-  images: { s3URL: string; filename: string }[]
+  images: { s3URL: string; filename: string }[],
+  articleType: ArticleType,
+  startDate: string,
+  endDate: string
 ) => {
   const URL = `/articles`;
-  const articleRequestObject = { title, description, price, images };
+  const articleRequestObject = {
+    title,
+    description,
+    price,
+    images,
+    articleType,
+    startDate,
+    endDate
+  };
   return axiosUtils.post(URL, articleRequestObject);
 };
 
@@ -139,7 +151,10 @@ export const putArticleHandler = (
   apiId: string,
   articleStatus: ArticleStatus,
   images: { s3URL: string; filename: string }[],
-  price: number
+  price: number,
+  articleType: ArticleType,
+  startDate: string,
+  endDate: string
 ) => {
   const URL = `/articles`;
   const articleRequestObject = {
@@ -149,6 +164,9 @@ export const putArticleHandler = (
     articleStatus,
     images,
     price,
+    articleType,
+    startDate,
+    endDate
   };
   return axiosUtils.put(URL, articleRequestObject);
 };
@@ -165,7 +183,7 @@ export const getEachChatroomHandler = (chatroomId: string | undefined) => {
 
 export const createChatroom = (articleApiId: string | undefined) => {
   const url = '/chat/room';
-  return axiosUtils.post(url, { articleApiId: articleApiId });
+  return axiosUtils.post(url, {articleApiId: articleApiId});
 };
 
 export const createOrder = (articleApiId: string | undefined) => {
@@ -180,7 +198,7 @@ export const createReview = (
   point: number,
   images: { s3URL: string; filename: string }[]
 ) => {
-  const reviewRequestData = { content, point, images };
+  const reviewRequestData = {content, point, images};
 
   const URL = `/article/${articleApiId}/order/${orderApiId}/review`;
 
@@ -232,7 +250,7 @@ export const updateReview = (
   point: number,
   images: { s3URL: string; filename: string }[]
 ) => {
-  const updateReviewData = { content, point, images };
+  const updateReviewData = {content, point, images};
   const URL = `/review/${reviewApiId}`;
 
   return axiosUtils.put(URL, updateReviewData);

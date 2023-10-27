@@ -4,6 +4,8 @@ export type Status = (typeof status)[number];
 // export type ArticleStatus = 'LIVE' | 'EXPIRED';
 export const articleStatus = ['LIVE', 'EXPIRED'] as const;
 export type ArticleStatus = (typeof articleStatus)[number];
+export const articleType = ['BUY', 'SELL'] as const;
+export type ArticleType = (typeof articleType)[number];
 
 export const articleInputError = [
   '제목을 비워둘 수 없습니다.',
@@ -20,10 +22,18 @@ export function getChipColorByArticleStatus(articleStatus: ArticleStatus) {
   }
 
   if (articleStatus === 'EXPIRED') {
-    return 'warning';
+    return 'error';
   }
 
   return 'secondary';
+}
+
+export function getChipColorByArticleType(articleType: ArticleType) {
+  if (articleType === 'BUY') {
+    return 'warning'
+  }
+
+  return 'success'
 }
 
 export interface Article {
@@ -34,9 +44,12 @@ export interface Article {
   thumbnail: string;
   status: Status;
   articleStatus: ArticleStatus;
+  articleType: ArticleType;
   createdDate: string;
   price: number;
   images: { apiId: string; refApiId: string; fullPath: string }[];
+  startDate: string;
+  endDate: string;
 }
 
 export class ArticleImpl implements Article {
@@ -48,9 +61,12 @@ export class ArticleImpl implements Article {
     public thumbnail: string,
     public status: Status,
     public articleStatus: ArticleStatus,
+    public articleType: ArticleType,
     public createdDate: string,
     public price: number,
-    public images: { apiId: string; refApiId: string; fullPath: string }[]
+    public images: { apiId: string; refApiId: string; fullPath: string }[],
+    public startDate: string,
+    public endDate: string
   ) {}
 }
 
@@ -62,9 +78,12 @@ export const ofArticleImpl = (dto: {
   thumbnail: string;
   status: string;
   articleStatus: string;
+  articleType: string;
   createdDate: string;
   price: number;
   images: { apiId: string; refApiId: string; fullPath: string }[];
+  startDate: string;
+  endDate: string;
 }) => {
   return new ArticleImpl(
     dto.apiId,
@@ -74,9 +93,12 @@ export const ofArticleImpl = (dto: {
     dto.thumbnail,
     dto.status as Status,
     dto.articleStatus as ArticleStatus,
+    dto.articleType as ArticleType,
     dto.createdDate,
     dto.price,
-    dto.images
+    dto.images,
+    dto.startDate,
+    dto.endDate
   );
 };
 

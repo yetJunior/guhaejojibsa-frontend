@@ -46,3 +46,11 @@ export function getFormattedDate(str: string) {
 export function getFormattedDateTime(str: string) {
   return `${getFormattedDate(str)} ${getFormattedTime(str)}`;
 }
+
+export function getFormattedISODateTime(date: Date) {
+  return `${date.getFullYear()}-${paddingZeroOrEmpty(date.getMonth()+ 1)}${date.getMonth() + 1}-${paddingZeroOrEmpty(date.getDate())}${date.getDate()}T${paddingZeroOrEmpty(date.getHours())}${date.getHours()}:${paddingZeroOrEmpty(date.getMinutes())}${date.getMinutes()}:00`
+}
+
+function paddingZeroOrEmpty(obj: any) {
+  return Math.floor(obj / 10) > 0 ? '' : '0'
+}
