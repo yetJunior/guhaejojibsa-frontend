@@ -88,6 +88,19 @@ const OrderDetailPage: React.FC = () => {
     window.open(`/article/${articleApiId}/order/${orderApiId}/${orderDetailResponse.receiptApiId}`, '_blank');
   };
 
+  const handleOrderCancellationWithReason = (cancelReason) => {
+
+    const url = `/articles/${articleApiId}/order/${orderApiId}`;
+    axiosUtils.put(url, { orderStatus: 'CANCEL', cancelReason: cancelReason })
+        .then((response) => {
+          console.log("주문 취소 요청 성공", response);
+          navigate(0);
+        })
+        .catch((error) => {
+          console.error("주문 취소 요청 중 오류 발생", error);
+        });
+  };
+
   const time = getFormattedDate(orderDetailResponse.date) + getFormattedTime(orderDetailResponse.date);
 
   return (
@@ -177,7 +190,7 @@ const OrderDetailPage: React.FC = () => {
           sellerName={orderDetailResponse.sellerName}
           orderStatus={orderDetailResponse.orderStatus}
           handleReviewClick={() => navigate(`/article/${articleApiId}/order/${orderApiId}/review`)}
-          handleOrderCancellation={() => handleOrderAction('CANCEL')}
+          handleOrderCancellation={handleOrderCancellationWithReason}
           handleOrderCompletionWithWaiting={() => handleOrderAction('WAIT')}
           handleOrderEnd={() => handleOrderAction('END')}
         />
