@@ -3,11 +3,16 @@ import { useLocation, useNavigate } from "react-router-dom";
 import authStore from "../../store/user/authStore";
 import useStores from "../../store/useStores";
 
+interface TokenDto {
+  token: string;
+  expiredTime: number;
+}
 
 const OauthRedirect = () => {
   const param = useLocation();
   const navigate = useNavigate();
   const { authStore } = useStores();
+
   useEffect(() => {
     const search = param.search;
     const queryString = search.split('?')[1];
@@ -17,12 +22,16 @@ const OauthRedirect = () => {
     const isNewUser = params.get("isNewUser");
 
     if (token !== null) {
-      const [bearer, tokenValue] = token.split(' ');
+
+      const tokenMatch: string | null = token.match(/token=([^,]+)/)?.[1] ?? null;
+      const expiredTimeMatch = token.match(/expiredTime=(\d+)/);
+      
+      const [bearer, tokenValue] = tokenMatch.split(' ');
       localStorage.setItem("accessToken", bearer + ' ' + tokenValue);
 
       authStore.findUserInfo()
         .then((res) => {
-          if (isNewUser==='true') {
+          if (isNewUser === 'true') {
             navigate('/oauth-signup');
           } else {
             navigate('/');
