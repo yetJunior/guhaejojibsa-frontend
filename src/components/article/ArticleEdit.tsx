@@ -33,8 +33,7 @@ import axiosUtils from '../../uitls/axiosUtils.ts';
 import {loadingTime} from '../../util/loadingUtil.ts';
 import {uploadImagesToS3} from '../../util/s3Client.ts';
 import {priceValidation, textValidation} from '../../util/validationUtil.ts';
-import {Dayjs} from "dayjs";
-import * as dayjs from "dayjs";
+import dayjs, {Dayjs} from "dayjs";
 import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DemoContainer, DemoItem} from "@mui/x-date-pickers/internals/demo";
@@ -99,8 +98,8 @@ export function ArticleEdit() {
   const [errorPrice, setErrorPrice] = useState<boolean>(false);
   const [errorDescription, setErrorDescription] = useState<boolean>(false);
   const [articleType, setArticleType] = useState<ArticleType>("SELL");
-  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs().add(1, 'minute'));
-  const [endDate, setEndDate] = useState<Dayjs | null>(dayjs().add(1, 'hour'));
+  const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<Dayjs | null>(null);
 
   const articleTypeHandleChange = (event: SelectChangeEvent) => {
     setArticleType(event.target.value as ArticleType);

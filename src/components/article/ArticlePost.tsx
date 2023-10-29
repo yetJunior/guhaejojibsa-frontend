@@ -30,8 +30,7 @@ import {priceValidation, textValidation} from '../../util/validationUtil.ts';
 import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DemoContainer, DemoItem} from "@mui/x-date-pickers/internals/demo";
-import {Dayjs} from "dayjs";
-import * as dayjs from "dayjs";
+import dayjs, {Dayjs} from "dayjs";
 import {getFormattedISODateTime} from "../../util/dateUtil.ts";
 
 const StyledArticleDetail = styled('div')({
@@ -68,7 +67,7 @@ export function ArticlePost() {
   const [errorPrice, setErrorPrice] = useState<boolean>(false);
   const [errorDescription, setErrorDescription] = useState<boolean>(false);
   const [articleType, setArticleType] = useState<ArticleType>("SELL");
-  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs().add(1, 'minute'));
+  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs().add(5, 'minute'));
   const [endDate, setEndDate] = useState<Dayjs | null>(dayjs().add(1, 'hour'));
 
   const handleImageChange = (event) => {
