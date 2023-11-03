@@ -1,4 +1,3 @@
-
 # 🐶 구해줘 집사
 
 ## 🐾 프로젝트 주제
@@ -13,20 +12,28 @@
 |    인원     |                                          5                                           |
 |    기간     |                               2023.08.09 ~ 2023.xx.xx                                |
 |   배포 링크   |                         [🌐link](http://guhaejo-jibsa.site/)                         |
+
+
+## 📝️ 프로젝트 자료
+|    분류     |                                          내용                                          |  
+|:---------:|:------------------------------------------------------------------------------------:|
 | API 문서 링크 |                      [📗link](http://docs.guhaejo-jibsa.site/)                       |
 |  서버 모니터링  |          [🖥️link](https://uptime.mon0mon.duckdns.org/status/guhaejo-jibsa)          |
 |  프로젝트 문서  | [📝link](https://outline.mon0mon.duckdns.org/s/13b50e7f-b702-4b91-acb1-3e6f7ce32ab4) |
 |  예제 동영상   |                        [📹link](https://youtu.be/xMsFRTb-t4Q)                        |
+| 발표자료(ppt) |                                      [📝link](https://docs.google.com/presentation/d/1dzuB_oULjFw9ykNXZsW0FmvAgpvzjnKs/edit?usp=sharing&ouid=101648730624907749894&rtpof=true&sd=true)                                      |  
+|  GitHub   |             [🌃back](https://github.com/yetJunior/guhaejojibsa-backend), [🏙️front](https://github.com/yetJunior/guhaejojibsa-frontend)             |  
 
 <div>
-    <img src="https://uptime.mon0mon.duckdns.org/api/badge/8/status?label=Status&labelPrefix=Back&upLabel=online&downLabel=offline"/>
-    <img src="https://uptime.mon0mon.duckdns.org/api/badge/8/ping?24&label=Ping%20in%2024h"/>
-    <img src="https://uptime.mon0mon.duckdns.org/api/badge/8/uptime?label=Uptime%20in%2024h"/>
+    <img src="https://uptime.mon0mon.duckdns.org/api/badge/9/status?label=Status&labelPrefix=Back&upLabel=online&downLabel=offline"/>
+    <img src="https://uptime.mon0mon.duckdns.org/api/badge/9/ping?24&label=Ping%20in%2024h"/>
+    <img src="https://uptime.mon0mon.duckdns.org/api/badge/9/uptime?label=Uptime%20in%2024h"/>
     <img src="https://img.shields.io/badge/Version-1.0.0-green"/>
 </div>
 
 [![Backend Deploy](https://github.com/yetJunior/guhaejojibsa-backend/actions/workflows/deploy.yml/badge.svg)](https://github.com/yetJunior/guhaejojibsa-backend/actions/workflows/deploy.yml)
 [![Frontend Deploy](https://github.com/yetJunior/guhaejojibsa-frontend/actions/workflows/deploy.yml/badge.svg)](https://github.com/yetJunior/guhaejojibsa-frontend/actions/workflows/deploy.yml)
+
 <br>
 
 ---
@@ -103,16 +110,20 @@
 
 --- 
 ### ER 다이어그램
-<img src="./docs/er-diagram.png" alt=""/>
+<img src="docs/er-diagram-ver2.png" alt="ER-Diagram"/>
 
 ### 플로우 차트
-<img src="./docs/flow-chart.png" alt=""/>
+<img src="docs/flow-chart-ver2.png" alt="Flowchart"/>
 
 ### 시퀀스 다이어그램
-<img src="./docs/sequence.png" alt=""/>
 
-### 아키텍처
-<img src="./docs/deploy.png" alt=""/>
+<img src="./docs/sequence.png" alt="Sequence Diagram"/>
+
+### 배포 구성도
+<img src="docs/deploy-ver3.png" alt="Deploy Diagram"/>
+
+### 아키텍쳐 구성도
+<img src="docs/architecture.png" alt="Architecture Diagram"/>
 
 
 --- 
@@ -171,14 +182,22 @@
 - 관리자는 신고 조회 및 관리 가능
 - 상태 값 : { '검토중', '해결됨', '거절됨' }
 
+
 ---
 
 ### 🔼 버전 정보
 
-#### 1️⃣ Ver 1.0
+#### 1️⃣ Ver 1.0 (23/08/09 ~ 23/09/15)
 - 게시글 기능 (판매만 등록 가능)
 - 게시글을 통한 상품 구매 가능 (토스 API 사용)
 - 게시글을 올린 유저와 채팅 기능 (Redis Pub/Sub 사용, WebSocket 사용)
 - 게시글의 리뷰 작성 기능
 - 게시글 및 리뷰 신고 기능
 - 소셜 로그인 기능 (Google/Naver)
+
+#### 2️⃣ Ver 1.1 (23/09/25 ~ 23/10/31)
+- 게시글 구매/판매 태그 추가
+- 게시글 기간 추가
+- HTTPS 적용
+- 결제 시 영수증 출력 기능 추가
+- 환불 및 취소 기능 추가
