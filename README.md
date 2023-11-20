@@ -25,9 +25,9 @@
 |  GitHub   |             [🌃back](https://github.com/yetJunior/guhaejojibsa-backend), [🏙️front](https://github.com/yetJunior/guhaejojibsa-frontend)             |  
 
 <div>
-    <img src="https://uptime.mon0mon.duckdns.org/api/badge/9/status?label=Status&labelPrefix=Back&upLabel=online&downLabel=offline"/>
-    <img src="https://uptime.mon0mon.duckdns.org/api/badge/9/ping?24&label=Ping%20in%2024h"/>
-    <img src="https://uptime.mon0mon.duckdns.org/api/badge/9/uptime?label=Uptime%20in%2024h"/>
+    <img src="https://uptime.mon0mon.duckdns.org/api/badge/2/status?label=Status&labelPrefix=Back&upLabel=online&downLabel=offline"/>
+    <img src="https://uptime.mon0mon.duckdns.org/api/badge/2/ping?24&label=Ping%20in%2024h"/>
+    <img src="https://uptime.mon0mon.duckdns.org/api/badge/2/uptime?label=Uptime%20in%2024h"/>
     <img src="https://img.shields.io/badge/Version-1.0.0-green"/>
 </div>
 
